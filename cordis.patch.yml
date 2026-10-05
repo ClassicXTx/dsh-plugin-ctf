@@ -1,0 +1,150 @@
+- insert:
+    - id: preset-ctf
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: ctf
+        name: CTF 竞赛
+        description: Web、Crypto、Reverse、Pwn、Forensics 和 Misc 解题工具与参考。
+        order: 10
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              suffix: 当前工作目录为 {{cwd}}。
+              prefix: !!js process.getBuiltinModule('node:module').createRequire(baseUrl)('dsh-plugin-ctf/runtime').persona()
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 131072
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
+          - id: tool-jobs
+            name: '@deepseek-ai/dsh-tool-jobs'
+          - id: ctf-skills
+            name: cordis:group
+            group: true
+            isolate:
+              skills: true
+            config:
+              - id: skill
+                name: '@deepseek-ai/dsh-skill'
+              - id: skill-filesystem
+                name: '@deepseek-ai/dsh-skill-filesystem'
+                config:
+                  includeDefaultRoots: false
+                  customSkillDirs: !!js >-
+                    [process.getBuiltinModule('node:module').createRequire(baseUrl)('dsh-plugin-ctf/runtime').skillDirectory]
+              - id: tool-skill
+                name: '@deepseek-ai/dsh-tool-skill'
+          - id: command-goal
+            name: '@deepseek-ai/dsh-command-goal'
+          - id: tool-goal
+            name: '@deepseek-ai/dsh-tool-goal'
+          - id: planning
+            name: cordis:group
+            group: true
+            isolate:
+              planMode: true
+            config:
+              - id: plan-mode
+                name: '@deepseek-ai/dsh-plan-mode'
+                config:
+                  section: |
+                    当前为计划模式。先用只读操作了解题面、附件、源码和环境，整理目标、已知证据、待验证假设及成功标准。此阶段不修改文件或配置，不提交 flag，不对远端进行主动测试。
+
+                    按步骤列出实验、工具、目标范围、资源预算、预期结果和失败后的分支。能从文件查明的信息先自行检查；仅对影响方案且无法查明的用户选择提问。用户的答复用于完善计划，不自动结束计划模式。
+
+                    完整方案通过 exit_plan_mode 提交，并将它作为当前回复的最后一项工具调用。批准并退出计划模式后，在后续步骤执行。若审批不可用或取消，保留计划并由用户切换模式；不要继续执行。计划保存在 exit_plan_mode 中，此阶段不使用 todo_write。
+          - id: compaction
+            name: cordis:group
+            group: true
+            isolate:
+              compaction: true
+              toolResultPruner: true
+            config:
+              - id: compaction-basic
+                name: '@deepseek-ai/dsh-compaction-basic'
+              - id: command-compact
+                name: '@deepseek-ai/dsh-command-compact'
+              - id: tool-result-pruner
+                name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+                config:
+                  thresholdChars: 60000
+                  headChars: 48000
+                  tailChars: 10000
+          - id: delegation
+            name: cordis:group
+            group: true
+            isolate:
+              workflowEngine: true
+            config:
+              - id: tool-subagent-control
+                name: '@deepseek-ai/dsh-tool-subagent-control'
+              - id: tool-subagent-list-agents
+                name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
+              - id: tool-subagent
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: spawn
+                  toolName: subagent
+                  modelSelectionSettings: true
+                  backgroundMode: continuable
+              - id: tool-subagent-fork
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: fork
+                  toolName: subagent_fork
+                  backgroundMode: continuable
+              - id: tool-subagent-codex
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: codex
+                  toolName: subagent_codex
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+              - id: tool-subagent-claude-code
+                name: '@deepseek-ai/dsh-tool-subagent'
+                config:
+                  provider: claude-code
+                  toolName: subagent_claude_code
+                  backgroundMode: one-shot
+                  maxDepth: provider-managed
+              - id: workflow-ptc
+                name: '@deepseek-ai/dsh-workflow-ptc'
+                config:
+                  provider: spawn
+              - id: tool-workflow
+                name: '@deepseek-ai/dsh-tool-workflow'
+              - id: tool-ralph
+                name: '@deepseek-ai/dsh-tool-ralph'
+                config:
+                  subagentProvider: spawn
+                  maxRounds: 128
+          - id: tool-ask-user
+            name: '@deepseek-ai/dsh-tool-ask-user'
+          - id: tool-todo
+            name: '@deepseek-ai/dsh-tool-todo'
+            config:
+              allowParallelInProgress: true
+          - id: tool-web
+            name: '@deepseek-ai/dsh-tool-web'
+            config:
+              fetch: true
+              searchTimeoutMs: 120000
+          - id: present
+            name: '@deepseek-ai/dsh-tool-present'
+          - id: tool-plugin-manager
+            name: '@deepseek-ai/dsh-plugin-manager/tools'
+          - id: mcp-ctf-browser
+            name: '@deepseek-ai/dsh-mcp-client'
+            config: !!js process.getBuiltinModule('node:module').createRequire(baseUrl)('dsh-plugin-ctf/runtime').browserConfig()

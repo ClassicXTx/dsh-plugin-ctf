@@ -1,0 +1,100 @@
+{
+  "upstreamSkills": [
+    {
+      "name": "ctf-web",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "e75c13f7d0c70e1651e335c36854b9f0df676cdd0fe7e3997f3eb681d64d3aa0",
+      "upstreamSha256": "20e8d2278208414c2d5d8177c48dcee15becfd01eaba406cd095d95e51822381",
+      "upstreamPath": "ctf-web/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-web/SKILL.md",
+      "file": "skills/ctf-web/guide.md"
+    },
+    {
+      "name": "ctf-crypto",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "0b4fa9f7ec06ac93ebe559d8654c7859261daa447a3a5b06ca00e1a1159f0b0c",
+      "upstreamSha256": "3f73227dbf2b12c063d8df68a207430dfe1113f290a9da0fe2715f73fc74259c",
+      "upstreamPath": "ctf-crypto/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-crypto/SKILL.md",
+      "file": "skills/ctf-crypto/guide.md"
+    },
+    {
+      "name": "ctf-reverse",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "7833c4fa1c9fe0a4898a34d50c8fab2fe62791f45c80a7abce878732e3713568",
+      "upstreamSha256": "c895e9e53f3f8c23df0bc94749db6244d57b629a38417d531a7a2199247f2da5",
+      "upstreamPath": "ctf-reverse/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-reverse/SKILL.md",
+      "file": "skills/ctf-reverse/guide.md"
+    },
+    {
+      "name": "ctf-pwn",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "fa23a9eb2f65d4e84ca212de67b1304792dfeb8919290b1192f82e4cf83c4920",
+      "upstreamSha256": "becc5c1cfb5abf32ba33a21463af48c4d0fa4d5d530bbc8ef3c030d68a12223f",
+      "upstreamPath": "ctf-pwn/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-pwn/SKILL.md",
+      "file": "skills/ctf-pwn/guide.md"
+    },
+    {
+      "name": "ctf-forensics",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "c51005b34c0b981d5aae669f2f6c95d31d50d2ed6e49d46da299d0d01f17e5d1",
+      "upstreamSha256": "c655daa66ead86c119de148d28cd431a9ed18429b22c0f3b717152c2640f5162",
+      "upstreamPath": "ctf-forensics/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-forensics/SKILL.md",
+      "file": "skills/ctf-forensics/guide.md"
+    },
+    {
+      "name": "ctf-misc",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "5a52289437bdd4605b426c84f51c741ba38c5354ee3578b5e3e52e515068a9db",
+      "upstreamSha256": "4817ba224018c6a27a18da92dc9c3bcd9cf83d65da3aac9f55de3a6991e5609c",
+      "upstreamPath": "ctf-misc/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-misc/SKILL.md",
+      "file": "skills/ctf-misc/guide.md"
+    },
+    {
+      "name": "ctf-writeup",
+      "repository": "https://github.com/ljagiello/ctf-skills",
+      "commit": "c332c7be1b27cb64639a20124ac55ba916adef92",
+      "license": "MIT",
+      "sha256": "bd5c9c183ba2c09809e417466373ca2b372bc29a921e50e40da4088988b35f06",
+      "upstreamSha256": "f67169dc8287284d1beb9ef86ee9927567acb29df18656b5b05360bd84cd5ed8",
+      "upstreamPath": "ctf-writeup/SKILL.md",
+      "url": "https://github.com/ljagiello/ctf-skills/blob/c332c7be1b27cb64639a20124ac55ba916adef92/ctf-writeup/SKILL.md",
+      "file": "skills/ctf-writeup/guide.md"
+    }
+  ],
+  "harness": {
+    "repository": "https://github.com/deepseek-ai/deepseek-harness",
+    "version": "0.2.0-rc.2",
+    "commit": "639ed015397290b3745d163aafe02ffee4aa3f84",
+    "source": "packages/bundle/web-app/presets/standard.patch.yml",
+    "license": "MIT"
+  },
+  "browser": {
+    "package": "@playwright/mcp",
+    "version": "0.0.82",
+    "repository": "https://github.com/microsoft/playwright-mcp",
+    "license": "Apache-2.0"
+  },
+  "localSkills": [
+    "ctf-workbench",
+    "ctf-evidence-review",
+    "ctf-audio-signals",
+    "ctf-web-state-timing"
+  ]
+}

@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+*.pyc
+work/
+reports/
+*.tgz
+.env
+.env.*
+ctf-plugin.local.json

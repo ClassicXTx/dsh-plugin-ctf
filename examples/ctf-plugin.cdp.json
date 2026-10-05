@@ -1,0 +1,13 @@
+{
+  "python": "python3",
+  "wslDistro": "Ubuntu",
+  "linuxPython": "python3",
+  "sage": "sage",
+  "pwndbg": "pwndbg",
+  "tshark": "tshark",
+  "radare2": "radare2",
+  "browserCdpEndpoint": "http://127.0.0.1:9222",
+  "browserActionTimeoutMs": "30000",
+  "browserNavigationTimeoutMs": "120000",
+  "browserCallTimeoutMs": "600000"
+}

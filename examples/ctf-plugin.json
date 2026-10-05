@@ -1,0 +1,9 @@
+{
+  "python": "python3",
+  "wslDistro": "Ubuntu",
+  "linuxPython": "python3",
+  "sage": "sage",
+  "pwndbg": "pwndbg",
+  "tshark": "tshark",
+  "radare2": "radare2"
+}

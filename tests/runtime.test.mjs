@@ -106,6 +106,28 @@ test('persona gives relocated skill locations and keeps evidence rules', t => {
   assert.match(text, /不构成任务授权/);
   assert.doesNotMatch(text, /C:\/deepseek-harness/);
 });
+
+test('browser connection secrets stay out of the model persona', t => {
+  const options = config(t, {
+    python: 'fixture-python',
+    browserCdpEndpoint: 'https://debug.example.test/connect?token=PRIVATE_CDP_SENTINEL',
+    browserUserDataDir: join(packageDirectory, 'PRIVATE_PROFILE_SENTINEL'),
+  });
+  const text = persona(options);
+  assert.match(text, /fixture-python/);
+  assert.doesNotMatch(text, /PRIVATE_CDP_SENTINEL|PRIVATE_PROFILE_SENTINEL|browserCdpEndpoint|browserUserDataDir/);
+  assert.ok(browserConfig(options).args.includes('https://debug.example.test/connect?token=PRIVATE_CDP_SENTINEL'));
+});
+
+test('configuration errors do not echo supplied secrets', t => {
+  for (const value of ['{"browserCdpEndpoint":"PRIVATE_PARSE_SENTINEL",}', '{"PRIVATE_UNKNOWN_SENTINEL":"value"}']) {
+    const options = config(t, value);
+    assert.throws(() => settings(options), error => {
+      assert.doesNotMatch(String(error), /PRIVATE_PARSE_SENTINEL|PRIVATE_UNKNOWN_SENTINEL/);
+      return true;
+    });
+  }
+});
 test('all 11 skills and attributed guides match their recorded hashes', t => {
   const folders = readdirSync(skillDirectory);
   assert.equal(folders.length, 11);

@@ -45,6 +45,7 @@ export async function apply(ctx, config) {
   ];
   const cursors = new Map();
   class Adapter extends LlmAdapter {
+    async listModels() { return [{id: 'fixture', name: 'Local synthetic fixture'}]; }
     async resolveModel(provider, model) { return {provider, id: model, name: model}; }
     async *stream(options) {
       assert.equal(options.provider, 'ctf-stability-local');
@@ -70,7 +71,12 @@ export async function apply(ctx, config) {
           return schema;
         });
         fs.writeFileSync(path.join(config.runDir, 'tool-schemas-' + mode + '.json'), JSON.stringify(used, null, 2) + '\n');
-        emit({kind: 'model-start', mode, toolCount: options.tools.length, restoredHistory: mode === 'resumed'});
+        assert.equal(new Set(options.tools.map(tool => tool.name)).size, options.tools.length, 'Duplicate tool names');
+        emit({kind: 'model-start', mode, toolCount: options.tools.length,
+          toolSchemaBytes: Buffer.byteLength(JSON.stringify(options.tools)),
+          messageBytes: Buffer.byteLength(JSON.stringify(options.messages)),
+          systemBytes: Buffer.byteLength(JSON.stringify(options.messages.filter(message => message.role === 'system'))),
+          restoredHistory: mode === 'resumed'});
       }
       if (step > 0) {
         const previous = plan[step - 1];

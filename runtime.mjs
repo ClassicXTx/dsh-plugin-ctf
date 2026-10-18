@@ -54,10 +54,17 @@ export function settings({ env = process.env, platform = process.platform, home 
   const dshHome = env.DSH_HOME || join(home, '.dsh');
   const configPath = env.DSH_CTF_CONFIG || join(dshHome, 'ctf-plugin.json');
   if (env.DSH_CTF_CONFIG && !existsSync(configPath)) throw new Error(`DSH_CTF_CONFIG does not exist: ${configPath}`);
-  const supplied = existsSync(configPath) ? JSON.parse(readFileSync(configPath, 'utf8').replace(/^\uFEFF/, '')) : {};
+  let supplied = {};
+  if (existsSync(configPath)) {
+    try {
+      supplied = JSON.parse(readFileSync(configPath, 'utf8').replace(/^\uFEFF/, ''));
+    } catch {
+      throw new Error('CTF settings could not be read as JSON');
+    }
+  }
   if (!supplied || typeof supplied !== 'object' || Array.isArray(supplied)) throw new Error('CTF settings must be a JSON object');
   for (const [key, value] of Object.entries(supplied)) {
-    if (!keys.has(key)) throw new Error(`Unknown CTF setting: ${key}`);
+    if (!keys.has(key)) throw new Error('Unknown CTF setting; check the configuration reference');
     if (typeof value !== 'string' || !value.trim() || /[\r\n\0]/.test(value)) throw new Error(`CTF setting ${key} must be a nonempty single-line string`);
   }
   for (const key of absolutePathKeys) {
@@ -81,9 +88,13 @@ export function settings({ env = process.env, platform = process.platform, home 
 
 export function persona(options) {
   const configured = settings(options);
+  const toolPaths = Object.fromEntries(
+    ['python', 'wslDistro', 'linuxPython', 'sage', 'pwndbg', 'tshark', 'radare2']
+      .map(key => [key, configured[key]]),
+  );
   return readFileSync(join(packageDirectory, 'prompts', 'ctf.md'), 'utf8')
     + '\n运行配置（执行前检查工具是否可用）：\n'
-    + JSON.stringify({ platform: options?.platform || process.platform, skillDirectory, ...configured }, null, 2)
+    + JSON.stringify({ platform: options?.platform || process.platform, skillDirectory, ...toolPaths }, null, 2)
     + '\nPowerShell 示例先赋值 $ctfPython、$ctfSkills、$ctfTshark，分别采用上方 python、skillDirectory、tshark。脚本也可从已加载技能的目录定位。\n';
 }
 

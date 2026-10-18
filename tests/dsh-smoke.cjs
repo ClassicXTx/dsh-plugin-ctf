@@ -25,7 +25,7 @@ fs.copyFileSync(path.join(__dirname, 'fixture.py'), fixtureScript);
 const yaml = createRequire(path.join(repo, 'package.json'))('js-yaml');
 const jsType = new yaml.Type('tag:yaml.org,2002:js', {kind: 'scalar', construct: value => ({__js: value}), predicate: value => value && typeof value.__js === 'string', represent: value => value.__js});
 const yamlSchema = yaml.DEFAULT_SCHEMA.extend([jsType]);
-const pluginRoot = path.resolve(__dirname, '..');
+const pluginRoot = path.resolve(process.env.DSH_CTF_PLUGIN || path.join(__dirname, '..'));
 const configPath = process.env.DSH_CTF_CONFIG || path.join(repo, '.data/ctf-plugin.json');
 assert.ok(fs.existsSync(configPath), 'Set DSH_CTF_CONFIG to a configured local tool path file');
 const localSettings = JSON.parse(fs.readFileSync(configPath, 'utf8').replace(/^\uFEFF/, ''));
@@ -148,6 +148,7 @@ async function stopServer(server) {
   owned.delete(server);
 }
 async function startServer(fixtureUrl) {
+  const started = performance.now();
   const port = await freePort();
   const patch = path.join(runDir, 'mock.patch.yml');
   fs.writeFileSync(patch, yaml.dump([
@@ -195,7 +196,9 @@ async function startServer(fixtureUrl) {
   };
   assert.equal((await fetch(base, {headers: {cookie}, signal: AbortSignal.timeout(10000)})).status, 200);
   const roster = await server.rpc('agentPresets/list');
+  assert.doesNotMatch(server.logs, /disabling profile plugin row "ctf-stability-mock"/, 'Local model fixture was disabled');
   assert.ok(roster.presets.some(item => item.id === 'ctf' && !item.broken), 'CTF preset broken');
+  (summary.startupMs ??= []).push(Math.round(performance.now() - started));
   return server;
 }
 function textContent(block) {return block.content.filter(item => item.type === 'text').map(item => item.text).join('\n');}
@@ -225,6 +228,7 @@ function verifyResults(events, mode, expectedCount) {
   return results.map(result => ({callId: result.toolCallId, isError: result.isError, contentBytes: Buffer.byteLength(textContent(result))}));
 }
 async function runTurn(server, sessionId, mode) {
+  const started = performance.now();
   const start = server.events.length;
   const prompt = {initial: 'CTF_STABILITY_INITIAL: execute the local fixture regression.', resumed: 'CTF_STABILITY_RESUME: recheck the same fixture after process restart.', reconnect: 'CTF_STABILITY_RECONNECT: read the same local fixture after automatic MCP recovery.'}[mode];
   await server.rpc('session/prompt', {request: {requestId: 'stability-' + mode, sessionId, mode: 'queue', content: [{type: 'text', text: prompt}]}});
@@ -241,7 +245,7 @@ async function runTurn(server, sessionId, mode) {
   const results = verifyResults(events, mode, {initial: 5, resumed: 4, reconnect: 3}[mode]);
   const final = 'CTF_STABILITY_' + mode.toUpperCase() + '_OK';
   assert.ok(events.some(item => item.kind === 'session' && item.event.type === 'assistant/message' && JSON.stringify(item.event.data).includes(final)), 'Final model output missing');
-  summary.runs.push({mode, completed: true, toolResults: results, restoredModelHistory: mode === 'resumed' && events.some(item => item.kind === 'model-start' && item.restoredHistory)});
+  summary.runs.push({mode, completed: true, durationMs: Math.round(performance.now() - started), model: events.find(item => item.kind === 'model-start'), toolResults: results, restoredModelHistory: mode === 'resumed' && events.some(item => item.kind === 'model-start' && item.restoredHistory)});
   return end.seq;
 }
 async function main() {
@@ -253,6 +257,7 @@ async function main() {
   assert.equal(skills.skills.filter(skill => skill.name.startsWith('ctf-')).length, 11);
   assert.ok(skills.skills.some(skill => skill.name === 'ctf-workbench'));
   assert.equal(skills.skills.length, 11);
+  assert.equal(new Set(skills.skills.map(skill => skill.name)).size, 11, 'Duplicate skill names');
   assert.ok(!skills.skills.some(skill => skill.name === 'non-ctf-fixture'));
   summary.sharedSkillRootsExcluded = true;
   summary.packagedSkills = 11;

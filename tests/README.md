@@ -11,10 +11,12 @@ The runtime tests cover configuration, browser arguments, skill files and source
 
 ## DSH integration
 
-Requires Windows, a built DeepSeek Harness 0.2.0-rc.2 checkout, and the Python toolbox. Set `DSH_CTF_PYTHON` to the Python executable and `DSH_CTF_CONFIG` to a tool-path JSON file, then run:
+Requires Windows, a built DeepSeek Harness 0.2.1-rc.2 checkout, and the Python toolbox. Set `DSH_CTF_PYTHON` to the Python executable and `DSH_CTF_CONFIG` to a tool-path JSON file, then run:
 
 ```text
 node tests/dsh-smoke.cjs <dsh-source-root> <report-directory>
 ```
 
 The test uses an isolated DSH_HOME, a local model fixture and a localhost webpage. It checks skill isolation, tool calls, session recovery and MCP reconnection, and stops its own processes. It does not call paid models or competition targets. Native Linux/macOS integration and Desktop UI behavior require separate checks.
+
+Set `DSH_CTF_PLUGIN` to test an installed or unpacked package instead of the source checkout. Results include host startup time, fixture turn time, initial message bytes and tool-schema bytes. These are local integration measurements, not model-token counts or a challenge-solving benchmark.

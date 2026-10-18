@@ -8,7 +8,7 @@ Copyright (c) 2026 Lukasz Jagiello. MIT license. The notice is retained in each 
 
 ## DeepSeek Harness
 
-The mode composition uses the standard preset and plugin APIs from [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness/tree/639ed015397290b3745d163aafe02ffee4aa3f84), version 0.2.0-rc.2.
+The mode composition uses the standard preset and plugin APIs from [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness/tree/687f282e8625c6b8d11ff58211a90524be2e4317), version 0.2.1-rc.2.
 
 Copyright (c) 2026 DeepSeek. MIT license. See [LICENSES/deepseek-harness-MIT.txt](LICENSES/deepseek-harness-MIT.txt).
 

@@ -2,7 +2,7 @@
 
 DeepSeek Harness 的 CTF 模式，包含 Web、密码学、逆向、Pwn、取证和杂项技能。
 
-支持 **DeepSeek Harness 0.2.0-rc.2**。选择新会话中的 **CTF 竞赛** 使用。
+支持 **DeepSeek Harness 0.2.1-rc.2**。选择新会话中的 **CTF 竞赛** 使用。
 
 ## 安装
 
@@ -15,14 +15,14 @@ https://github.com/ClassicXTx/dsh-plugin-ctf
 Web CLI：
 
 ```sh
-dsh plugin --profile web add github:ClassicXTx/dsh-plugin-ctf#v1.2.0
+dsh plugin --profile web add github:ClassicXTx/dsh-plugin-ctf#v1.2.1
 ```
 
 Desktop 先启动一次以创建 profile，然后退出应用，使用 Desktop 自带的 CLI 安装。Windows 默认路径：
 
 ```powershell
 $desktopDsh = Join-Path $env:LOCALAPPDATA 'Programs/DeepSeek Harness/resources/runtime/cli/bin/dsh.cmd'
-& $desktopDsh plugin --profile desktop add 'github:ClassicXTx/dsh-plugin-ctf#v1.2.0'
+& $desktopDsh plugin --profile desktop add 'github:ClassicXTx/dsh-plugin-ctf#v1.2.1'
 ```
 
 安装后重新打开 DSH。插件通过 `dsh-plugin` 主题列入 [社区插件目录](https://github.com/topics/dsh-plugin)。
@@ -46,6 +46,8 @@ $desktopDsh = Join-Path $env:LOCALAPPDATA 'Programs/DeepSeek Harness/resources/r
 技能随 CTF 模式加载。专题入口对应相邻的 `guide.md` 和参考文件，包含算法、命令与示例。
 
 开始时给出题面、附件位置、目标范围和 flag 格式。原始附件、分析产物和解题脚本分别保存在题目目录中。
+
+用于授权靶场和比赛。目标范围、速率以及地区、组织和赛事的具体规则写入项目 `AGENTS.md`；模式默认提示词见 [prompts/ctf.md](prompts/ctf.md)。
 
 ## 工具
 
